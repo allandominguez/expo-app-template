@@ -29,7 +29,7 @@ Then update `app.json`/`package.json`'s `name`/`slug` and `README.md`'s title fo
 - Jest via `jest-expo` + `@testing-library/react-native`
 - GitHub Actions CI (lint, typecheck, test) on every PR and push to `main`
 - CodeQL static analysis (PR, push to `main`, and weekly schedule)
-- Dependabot, with `ignore` rules for the packages Expo SDK-curates (`react`, `react-native`, `jest`, `typescript`, `@types/react`, `@types/jest`)
+- Dependabot, with `ignore` rules for the packages Expo SDK-curates (`react`, `react-native`, `jest`, `typescript`, `@types/react`, `@types/jest`) — see [`MAINTENANCE.md`](MAINTENANCE.md) for what to do when one of these PRs fails CI anyway
 - `.nvmrc` Node pinning
 - `features/`/`lib`/`navigation/` folder convention (see [Project Structure](#project-structure))
 

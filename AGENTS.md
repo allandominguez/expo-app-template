@@ -1,6 +1,6 @@
 # expo-app-template
 
-Reference documentation for this codebase's layout and commands. For the engineering principles this template is built on — and the reasoning behind them — see [`ARCHITECTURE.md`](ARCHITECTURE.md).
+Reference documentation for this codebase's layout and commands. For the engineering principles this template is built on — and the reasoning behind them — see [`ARCHITECTURE.md`](ARCHITECTURE.md). For recurring tooling situations that come back around on their own schedule (a Dependabot run, an upstream release), see [`MAINTENANCE.md`](MAINTENANCE.md).
 
 ## Expo has changed
 

@@ -14,10 +14,12 @@ Extracted from the base setup redone from scratch across a couple of real Expo p
 Click **Use this template** on GitHub, or:
 
 ```bash
-gh repo create <new-repo-name> --template allandominguez/expo-app-template --private --clone
+gh repo create <new-repo-name> --template allandominguez/expo-app-template --public --clone
 ```
 
 Then update `app.json`/`package.json`'s `name`/`slug` and `README.md`'s title for the new project.
+
+Defaulting to `--public` here is deliberate, not just a style choice — see [`MAINTENANCE.md`](MAINTENANCE.md) for why a private repo breaks the CodeQL workflow this template ships with.
 
 ---
 

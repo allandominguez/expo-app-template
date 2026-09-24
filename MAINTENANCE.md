@@ -29,3 +29,11 @@ Then let CI re-run and merge once green.
 **Why:** `eslint-config-expo`'s bundled `eslint-plugin-react` doesn't support ESLint 10 yet. Letting the major bump through breaks `npm run lint` outright (`contextOrFilename.getFilename is not a function`).
 
 **Fix/check:** Periodically check [`eslint-config-expo`'s changelog or npm page](https://www.npmjs.com/package/eslint-config-expo) for ESLint 10 support. Once it lands, remove the `eslint` entry from `dependabot.yml`'s `ignore` list and let Dependabot retry the major bump normally.
+
+## CodeQL fails on a private repo
+
+**Symptom:** The `CodeQL` workflow fails on every push with `Code scanning is not enabled for this repository. Please enable code scanning in the repository settings.` — not a workflow bug, and not fixable by changing `codeql.yml`'s `permissions:` block.
+
+**Why:** CodeQL code scanning is part of GitHub Advanced Security. It's free and automatic on public repos, but on a personal (non-Enterprise) GitHub account, private repos don't get it at all unless Advanced Security has been purchased separately — confirmed via `gh api -X PATCH ... security_and_analysis` returning `"Advanced security has not been purchased."` This applies to *every* project generated from this template, not just the template repo itself — it's an account-level constraint, not something specific to any one repo.
+
+**Fix:** Make the repo public (`gh repo create ... --public`, or flip visibility later in Settings → General) — this is why the template's own usage instructions in `README.md` default to `--public` rather than `--private`. If a project genuinely needs to stay private, either purchase GitHub Advanced Security for the account, or remove `.github/workflows/codeql.yml` from that project — a red, permanently-failing CodeQL check isn't better than no CodeQL check at all.

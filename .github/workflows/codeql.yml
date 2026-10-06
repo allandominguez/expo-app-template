@@ -6,7 +6,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: "0 0 * * 1" # Weekly on Monday
+    - cron: '0 0 * * 1' # Weekly on Monday
 
 # Write privilege: job uploads SARIF results to the Security tab.
 permissions:
@@ -26,5 +26,5 @@ jobs:
       - uses: github/codeql-action/init@v4
         with:
           languages: javascript-typescript
-          build-mode: none  # JS/TS is parsed directly; no build step to run.
+          build-mode: none # JS/TS is parsed directly; no build step to run.
       - uses: github/codeql-action/analyze@v4

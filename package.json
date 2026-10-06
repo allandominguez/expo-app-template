@@ -35,6 +35,12 @@
     "test": "jest",
     "test:watch": "jest --watchAll"
   },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "printWidth": 100
+  },
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",

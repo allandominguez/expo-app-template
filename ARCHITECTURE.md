@@ -4,9 +4,9 @@ This is a deliberately curated statement of the principles this template is buil
 
 ## Structure: package-by-feature
 
-**Source:** Robert C. Martin, *Clean Architecture* — "Screaming Architecture."
+**Source:** Robert C. Martin, _Clean Architecture_ — "Screaming Architecture."
 
-Code is organized by feature (`features/<name>/`), not by technical layer (`components/`, `hooks/`, `services/`). Martin's argument is that a codebase's top-level structure should announce what the system *does*, not which framework it uses — opening the top level of this repo should tell you it's an app with features, not just "a React Native project." A layer-first structure inverts that: opening `hooks/` or `components/` tells you nothing about the product, and every change to one feature touches directories shared by every other feature, inviting accidental coupling.
+Code is organized by feature (`features/<name>/`), not by technical layer (`components/`, `hooks/`, `services/`). Martin's argument is that a codebase's top-level structure should announce what the system _does_, not which framework it uses — opening the top level of this repo should tell you it's an app with features, not just "a React Native project." A layer-first structure inverts that: opening `hooks/` or `components/` tells you nothing about the product, and every change to one feature touches directories shared by every other feature, inviting accidental coupling.
 
 **In this repo right now:** `features/`, `lib/`, and `navigation/` exist as the convention, each holding only a `.gitkeep` — there's no feature code yet to organize, but the shape is already committed to.
 
@@ -14,7 +14,7 @@ Code is organized by feature (`features/<name>/`), not by technical layer (`comp
 
 **Source:** SOLID's Single Responsibility Principle, applied to React's component model; the boundary-mocking approach below follows from SOLID's Dependency Inversion Principle.
 
-Business logic (data fetching, validation, derived state) lives in custom hooks; components stay thin rendering layers. This is SRP applied at the hook/component boundary rather than the class boundary SOLID was originally written for: a component has one reason to change (the UI changed), a hook has a different one (the logic changed). Testing follows from this — mock at system boundaries (device APIs, external services), not between a hook and the component that calls it. That's only a coherent testing strategy because the component depends on the hook's *interface*, not its internals — Dependency Inversion, not just a testing convenience.
+Business logic (data fetching, validation, derived state) lives in custom hooks; components stay thin rendering layers. This is SRP applied at the hook/component boundary rather than the class boundary SOLID was originally written for: a component has one reason to change (the UI changed), a hook has a different one (the logic changed). Testing follows from this — mock at system boundaries (device APIs, external services), not between a hook and the component that calls it. That's only a coherent testing strategy because the component depends on the hook's _interface_, not its internals — Dependency Inversion, not just a testing convenience.
 
 **In this repo right now:** no illustration — `App.tsx` is still the unmodified Expo starter screen with no hooks, and `features/` is empty. This is a convention for code that doesn't exist yet, not a demonstrated pattern. It'll hold once the first feature lands.
 

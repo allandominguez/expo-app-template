@@ -33,9 +33,10 @@ gh api -X PUT "repos/$REPO/branches/main/protection" --input - <<'EOF'
   "required_status_checks": {
     "strict": true,
     "checks": [
-      { "context": "static-analysis" },
-      { "context": "test" },
-      { "context": "CodeQL" }
+      { "context": "static-analysis", "app_id": 15368 },
+      { "context": "test", "app_id": 15368 },
+      { "context": "analyze", "app_id": 15368 },
+      { "context": "CodeQL", "app_id": 57789 }
     ]
   },
   "enforce_admins": false,
@@ -51,7 +52,7 @@ EOF
 gh api -X PATCH "repos/$REPO" -F allow_merge_commit=false -F delete_branch_on_merge=true
 ```
 
-This requires the three CI checks (`static-analysis` and `test` are the jobs in [`ci.yml`](.github/workflows/ci.yml); `CodeQL` is the code-scanning result) and a branch that is up to date with `main`, forces linear history (squash or rebase merges only, so merge commits are switched off), requires review conversations to be resolved, and blocks force-pushes and deletion. It asks for no approving reviews, since a solo project can't approve its own pull requests, and doesn't apply to admins, so you can still bypass it in an emergency. Auto-deleting merged branches keeps the branch list short.
+This requires four checks (`static-analysis` and `test` are the jobs in [`ci.yml`](.github/workflows/ci.yml), `analyze` is the job in [`codeql.yml`](.github/workflows/codeql.yml), and `CodeQL` is the code-scanning result those uploads produce), each pinned to the app that reports it (`15368` is GitHub Actions, `57789` is code scanning) so nothing else can satisfy the name, and a branch that is up to date with `main`, forces linear history (squash or rebase merges only, so merge commits are switched off), requires review conversations to be resolved, and blocks force-pushes and deletion. It asks for no approving reviews, since a solo project can't approve its own pull requests, and doesn't apply to admins, so you can still bypass it in an emergency. Auto-deleting merged branches keeps the branch list short. If you rename or add jobs in either workflow, update the `checks` list to match, or the new job isn't required, and a renamed one is waited on forever.
 
 ---
 

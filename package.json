@@ -33,6 +33,7 @@
     "format": "prettier --write .",
     "prepare": "husky",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "test:watch": "jest --watchAll"
   },
   "prettier": {
@@ -48,7 +49,23 @@
     ]
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "collectCoverageFrom": [
+      "features/**/*.{ts,tsx}",
+      "lib/**/*.{ts,tsx}",
+      "navigation/**/*.{ts,tsx}",
+      "!**/__tests__/**",
+      "!**/*.d.ts",
+      "!**/types.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 90,
+        "branches": 85,
+        "functions": 85,
+        "lines": 90
+      }
+    }
   },
   "private": true
 }

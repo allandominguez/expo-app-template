@@ -37,6 +37,16 @@ Don't build for a requirement you don't have yet. Three similar lines of code ar
 
 **In this repo right now:** `App.test.tsx` asserts on rendered text (`screen.getByText(...)`), not on any internal call — a small but real instance of the behavioural-testing property. It doesn't yet illustrate boundary-mocking; there's no boundary to mock until a feature introduces one.
 
+**Coverage floors.** CI runs `npm run test:coverage`. Floors are set by how costly a gap is and how cheaply it can be closed, not as one uniform number, and they are round standards rather than snapshots of today's coverage:
+
+- **Data layer** (repositories, database setup and migrations, file storage) — the strictest floor, because a bug there loses a user's data, and these modules are cheap to test: plain inputs and outputs behind a mocked device boundary. Add one directory-path entry per data directory (for example `"./lib/repositories/"`) at 90 on all four metrics once the project has one.
+- **Hooks** — a high floor, because "hooks own logic" means that is where behaviour lives. Add a single per-file entry, `"./**/hooks/*.ts"` at 90, as soon as the first hook exists, so every later hook directory is held to it with no config change. Jest checks a glob per file, and a directory path would aggregate and need an entry per feature. Don't add it earlier: with no matching file Jest exits with "Coverage data for ./**/hooks/*.ts was not found". Pure decision logic stays in plain functions tested directly; what can't be reached without a heavy harness (gesture and event wiring) gets `/* istanbul ignore next */` with a one-line reason above it, not a lower floor, so the exception stays next to the code it excuses.
+- **UI components and screens** — no floor of their own, only the overall backstop. A per-area floor on thin rendering code turns the number into pressure to write brittle layout tests; that confidence belongs higher in the testing pyramid.
+
+Files with no logic to cover (type declarations, re-export barrels, entry and navigator wiring) are excluded so the numbers stay honest; UI stays measured so a drop is visible. `package.json`'s Jest config is the source of truth.
+
+**In this repo right now:** only the global floor (90 statements, 85 branches, 85 functions, 90 lines) is configured, because there is almost no code to measure. `App.tsx` and `index.ts` are entry wiring and are not collected, and `collectCoverageFrom` excludes only the generic patterns (`__tests__`, `*.d.ts`, `types.ts`), so nothing is measured yet and the floor starts applying with the first file in `features/`, `lib/` or `navigation/`. Add file-specific exclusions (barrels, a navigator definition) as the project grows.
+
 ## Professional practices (not tied to a named principle)
 
 Some things here are deliberate discipline rather than an application of citable literature — worth stating plainly rather than force-fitting a source that doesn't really apply:

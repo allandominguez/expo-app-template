@@ -21,6 +21,7 @@ npm run web
 npm run lint        # expo lint (ESLint; Prettier runs as an ESLint rule)
 npm run typecheck   # tsc --noEmit
 npm test            # jest (jest-expo preset)
+npm run test:coverage   # jest --coverage; fails if coverage drops below the floors in package.json (CI runs this)
 npm run format      # prettier --write .
 ```
 
@@ -54,3 +55,5 @@ The reasoning behind this layout — and the rest of this project's engineering 
 ### Testing
 
 Jest via the `jest-expo` preset with `@testing-library/react-native`. Run `npm test` or `npm run test:watch`.
+
+Coverage is enforced by `npm run test:coverage`, which CI runs. The template ships a global floor only, because it has almost no code; the reasoning and the stricter per-area floors to add as the project grows are in [`ARCHITECTURE.md`](ARCHITECTURE.md). Untestable wiring is marked with `/* istanbul ignore next */` and a one-line reason above it, not excused by a lower floor, and files with no logic (barrels, entry and navigator wiring) are excluded in `collectCoverageFrom` in `package.json`'s Jest config.

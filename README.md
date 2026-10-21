@@ -112,9 +112,10 @@ Feature folders are self-contained — components, hooks, types, and any storage
 npm run lint       # expo lint (ESLint) on .ts/.tsx
 npm run typecheck  # tsc --noEmit
 npm test           # Jest
+npm run test:coverage  # Jest with the coverage floors CI enforces
 ```
 
-All three run on every pull request and on pushes to `main` via [GitHub Actions](.github/workflows/ci.yml), and a passing run is required to merge. Pre-commit hooks (gitleaks secret scanning, lint-staged) run the same lint/format checks locally on staged files.
+Lint, typecheck and the tests (as `test:coverage`) run on every pull request and on pushes to `main` via [GitHub Actions](.github/workflows/ci.yml), and a passing run is required to merge. Pre-commit hooks (gitleaks secret scanning, lint-staged) run the same lint/format checks locally on staged files.
 
 ---
 

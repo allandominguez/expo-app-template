@@ -21,6 +21,39 @@ Then update `app.json`/`package.json`'s `name`/`slug` and `README.md`'s title fo
 
 Defaulting to `--public` here is deliberate, not just a style choice — see [`MAINTENANCE.md`](MAINTENANCE.md) for why a private repo breaks the CodeQL workflow this template ships with.
 
+### Protect `main`
+
+GitHub copies a template's files into a new repo but not its settings, so a new project starts with `main` unprotected, and "a passing run is required to merge" (see [Development](#development)) isn't true until you turn it on. From inside the new repo, once, after its first push:
+
+```bash
+REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
+
+gh api -X PUT "repos/$REPO/branches/main/protection" --input - <<'EOF'
+{
+  "required_status_checks": {
+    "strict": true,
+    "checks": [
+      { "context": "static-analysis", "app_id": 15368 },
+      { "context": "test", "app_id": 15368 },
+      { "context": "analyze", "app_id": 15368 },
+      { "context": "CodeQL", "app_id": 57789 }
+    ]
+  },
+  "enforce_admins": false,
+  "required_pull_request_reviews": { "required_approving_review_count": 0 },
+  "restrictions": null,
+  "required_linear_history": true,
+  "allow_force_pushes": false,
+  "allow_deletions": false,
+  "required_conversation_resolution": true
+}
+EOF
+
+gh api -X PATCH "repos/$REPO" -F allow_merge_commit=false -F delete_branch_on_merge=true
+```
+
+This requires four checks (`static-analysis` and `test` are the jobs in [`ci.yml`](.github/workflows/ci.yml), `analyze` is the job in [`codeql.yml`](.github/workflows/codeql.yml), and `CodeQL` is the code-scanning result those uploads produce), each pinned to the app that reports it (`15368` is GitHub Actions, `57789` is code scanning) so nothing else can satisfy the name, and a branch that is up to date with `main`, forces linear history (squash or rebase merges only, so merge commits are switched off), requires review conversations to be resolved, and blocks force-pushes and deletion. It asks for no approving reviews, since a solo project can't approve its own pull requests, and doesn't apply to admins, so you can still bypass it in an emergency. Auto-deleting merged branches keeps the branch list short. If you rename or add jobs in either workflow, update the `checks` list to match, or the new job isn't required, and a renamed one is waited on forever.
+
 ---
 
 ## What's included
